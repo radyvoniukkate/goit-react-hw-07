@@ -4,24 +4,13 @@ import axios from "axios";
 export const fetchContacts = createAsyncThunk(
   "contacts/fetchContacts",
   async (_, { rejectWithValue }) => {
+    console.log("Fetching contacts..."); // Лог до запиту
     try {
-      const response = await axios.get("/api/contacts", {
-        headers: {
-          "Cache-Control": "no-cache",
-        },
-      });
-      if (!Array.isArray(response.data)) {
-        throw new Error("API did not return an array");
-      }
-      console.log("API Response:", response.data); // Логування відповіді API
-
+      const response = await axios.get("/api/contacts");
+      console.log("API Response Data:", response.data); // Лог даних з API
       return response.data;
     } catch (error) {
-      if (error.response.status === 429) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const response = await axios.get("/api/contacts");
-        return response.data;
-      }
+      console.log("Error fetching contacts:", error.message); // Лог помилки
       return rejectWithValue(error.message);
     }
   }
