@@ -60,6 +60,11 @@ export const selectError = (state) => state.contacts.error;
 export const selectFilteredContacts = createSelector(
   [selectContacts, selectNameFilter],
   (contacts, filter) => {
+     if (!Array.isArray(contacts)) {
+       console.error("Contacts is not an array:", contacts);
+       return [];
+     }
+
     const normalizedFilter = filter.toLowerCase();
     const filteredContacts = contacts.filter((contact) =>
       contact.name.toLowerCase().includes(normalizedFilter)

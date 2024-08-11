@@ -5,7 +5,14 @@ export const fetchContacts = createAsyncThunk(
   "contacts/fetchContacts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/contacts");
+      const response = await axios.get("/api/contacts", {
+        headers: {
+          "Cache-Control": "no-cache",
+        }
+      });
+      if (!Array.isArray(response.data)) {
+        throw new Error("API did not return an array");
+      }
       return response.data;
     } catch (error) {
       if (error.response.status === 429) {

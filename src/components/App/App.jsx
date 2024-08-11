@@ -23,6 +23,7 @@ const App = () => {
   console.log("Loading:", loading);
   console.log("Error:", error);
   console.log("Contacts:", contacts);
+console.log("Contacts Type:", typeof contacts, Array.isArray(contacts));
 
  useEffect(() => {
    if (!loading && contacts.length === 0) {
@@ -34,12 +35,18 @@ const App = () => {
     dispatch(changeFilter(event.target.value));
   };
 
-  const getFilteredContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
+const getFilteredContacts = () => {
+  if (!Array.isArray(contacts)) {
+    console.error("Contacts is not an array:", contacts);
+    return [];
+  }
+
+  const normalizedFilter = filter.toLowerCase();
+  return contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(normalizedFilter)
+  );
+};
+
 
   const filteredContacts = getFilteredContacts();
 
